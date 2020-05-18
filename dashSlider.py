@@ -92,3 +92,5 @@ fig7.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
 fig7.update_layout(showlegend=False)
 st.plotly_chart(fig7)
 
+if __name__ == '__main__':
+    main()
