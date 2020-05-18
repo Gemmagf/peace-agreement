@@ -6,3 +6,4 @@ plotly-express==0.4.1
 seaborn==0.10.1
 streamlit==0.59.0
 matplotlib==3.2.1
+xlrd == 1.0.0
