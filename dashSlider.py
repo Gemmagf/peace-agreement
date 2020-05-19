@@ -32,8 +32,7 @@ st.plotly_chart(fig1)
 
 
 # Selecionar any i veure quins acords predominen
-#st.info('1.Select the year')
-stt.set_theme({'primary': '#1b3388'})
+
 any = st.slider('Data', 1991,2019, (1997,2012) )  # min: 0, max: 23
 fig = make_subplots(rows=1, cols=2)
 
@@ -59,7 +58,8 @@ for name, count in ds.iteritems():
         x.append(Xpos)
         y.append(Ypos)
         Xpos += 1
-    series.append(go.Scatter(x=x, y=y, mode='markers', marker=dict(symbol = 'circle', size= 15, color=['#B2D0EB','#8AB3BA']), name=f'{name} ({count})'))
+    #col =['#B2D0EB']*len(x)*100)/len(year)))) + ['#8AB3BA']*(int(round((len(NWR)*100)/len(year))))
+    series.append(go.Scatter(x=x, y=y, mode='markers', marker=dict(symbol = 'circle', size= 15), name=f'{name} ({count})'))
 
 
 fig2 = go.Figure(dict(data=series, layout=go.Layout(
@@ -72,23 +72,18 @@ fig2 = go.Figure(dict(data=series, layout=go.Layout(
 st.plotly_chart(fig2)
 
 
-# Drets humans
-
-#dd = pd.read_excel('DretsHum.xlsx')
-#labels = ['HrfSp','HrfBor','HrfTinc','HrfOth']
-#fig3 = go.Figure(go.Treemap(labels = labels,marker_colors = ["pink", "royalblue", "lightgray", "purple", "cyan", "lightgray", "lightblue"]))
-#st.plotly_chart(fig3)
-
 # Estat dels acords guardat per motiu de l'acords
-# st.sidebar.info('2.Select agreement status')
+
 stat = st.selectbox('Select the status of the agreement',('Multiparty signed/agreed','Unilateral document','Agreement with subsequent status','Status unclear')) 
 
+fig47 = make_subplots(
+    rows=1, cols=2,
+    specs=[[{}, {}]])
+    
 df = pd.read_excel('Estat.xlsx')
 df = df.loc[df['Status'] == stat]
-fig4 = px.bar(df, x="Count", y="Contp", color='RelGuerra',color_discrete_map={'War Related': '#B2D0EB', 'No War Related': '#8AB3BA'}, orientation='h')
-fig4.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
-fig4.update_layout(showlegend=False)
-st.plotly_chart(fig4)
+hola =go.Bar(x=df["Count"], y=df["Contp"], orientation='h')
+fig47.add_trace(go.Bar(x=df["Count"], y=df["Contp"], orientation='h'), row=1, col=1)
 
 
 
@@ -98,29 +93,28 @@ pag = st.slider('Pages', 1,149, (1,100))
 dd = pd.read_excel('Europa2.xlsx')
 dd = dd[(dd['Lgt']>=pag[0])& (dd['Lgt']<=pag[1])]
 dd = dd[(dd['N_characters']>=lletres[0])& (dd['Lgt']<=lletres[1])]
-# dd= dd[(dd['Dat']>=any[0])& (dd['Dat']<=any[1])] per algun motiu si considero aquest filtre em falla
-fig5 = px.scatter(dd, x='Lgt' , y='N_characters', color = 'RelGuerra',color_discrete_map={'War Related': '#B2D0EB', 'No War Related': '#8AB3BA'} ,width=770, height=500)
-fig5.update_layout(showlegend=False)
-fig5.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
-st.plotly_chart(fig5)
+
+hola = go.Scatter(x=dd['Lgt'] , y=dd['N_characters'],mode='markers', marker=dict(symbol = 'circle', size= 5))
+fig47.add_trace(hola, row=1, col=2)
+fig47.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+fig47.update_layout(showlegend=False)
+st.plotly_chart(fig47)
 
 
 # Grafic per grups
-grups = st.multiselect('Which groups to you whant to consider?',options=['GChRhet', 'GChSubs','GDisRhet','GDisAntid','GDisSubs','GAgeRhet','GAgeAntid','GAgeSubs','GMig','GMigSubs','GRaRhet','GRaAntid','GRaSubs','GReRhet','GReAntid','GReSubs','GOth','GOthAntid','GRefRhet','GRefSubs','GRefOth','GSoc','GSocAntid'], default=['GDisSubs','GChRhet','GReAntid','GRefRhet'])
+grups = st.multiselect('Which groups to you whant to consider?',options=['GChRhet', 'GChSubs','GDisRhet','GDisAntid','GDisSubs','GAgeRhet','GAgeAntid','GAgeSubs','GMig','GMigSubs','GRaRhet','GRaAntid','GRaSubs','GReRhet','GReAntid','GReSubs','GOth','GOthAntid','GRefRhet','GRefSubs','GRefOth','GSoc','GSocAntid'], default=['GDisSubs','GChRhet','GReAntid','GRefRhet','GRefRhet','GRefSubs','GRefOth','GSoc','GSocAntid'])
 
 df =pd.read_excel('agurpacions4.xlsx')
 df2 = pd.DataFrame()
 for i, grup in enumerate(grups):
     df2 = df2.append(df.loc[df['Grup'] == grup])
 r = np.arange(1,24)
-#names =['GChRhet', 'GChSubs','GDisRhet','GDisAntid','GDisSubs','GAgeRhet','GAgeAntid','GAgeSubs','GMig','GMigSubs','GRaRhet','GRaAntid','GRaSubs','GReRhet','GReAntid','GReSubs','GOth','GOthAntid','GRefRhet','GRefSubs','GRefOth','GSoc','GSocAntid']
-#fig7 = go.Figure()
 
 fig7= make_subplots(rows=1, cols=2, shared_yaxes=True)
 fig7.add_trace(go.Bar(x=grups, y=df2['NWR'], name='No War Related',  marker_color='#8AB3BA'))
 fig7.add_trace(go.Bar(x=grups, y=df2['WR'], name= 'War Related', marker_color='#B2D0EB'))
 fig7.update_layout(barmode='stack', xaxis={'categoryorder':'category ascending'})
-fig7.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+fig7.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',width=770,height=500)
 fig7.update_layout(showlegend=False)
 st.plotly_chart(fig7)
 
