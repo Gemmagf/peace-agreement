@@ -15,22 +15,22 @@ import altair as alt
 
 # Titol i subtitol
 st.markdown("<h1 style='text-align: center; color: #8AB3BA;'>PEACE AGREEMENTS IN EUROPE FROM 1991 TO 2019</h1>", unsafe_allow_html=True)
-st.markdown("<h4 style='text-align: center; color: #D0D3DA;'>Gemma Garcia de la Fuente", unsafe_allow_html=True)
-
+st.markdown("<h4 style='text-align: center; color: #D0D3DA;'>Gemma Garcia de la Fuente\n", unsafe_allow_html=True)
+st.markdown(" ")
+st.markdown("\n ")
 # Finestra parametres
 # st.sidebar.title("Filters")
 # st.sidebar.info("Here you can filter by diferent vairbales in orther to get the specific infomration you're interest about")
 
 
 # Grafic per veure el nombre d'acords al llarg del temps
-
+st.write('This is a dashboard to explore how Europe maintains it’s peace between countries. After wars, many issues had to be taken care of. We will explore which type of agreements is going on in Europ from 1991 to 2019. ')
 dd = pd.read_excel('AnysRGuer.xlsx') 
 fig1 = px.scatter(dd, x='Any' , y='Casos', color = 'RelGuerra',color_discrete_map={'War Related': '#B2D0EB', 'No War Related': '#8AB3BA'}, size = 'Casos',width=770, height=300)
 fig1.update_layout(showlegend=False)
 fig1.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
 st.plotly_chart(fig1)
-
-
+st.write('As we can see the amount of agreements reduces with time. Also the majority of them are manly before 2000 and war related. From this we can abstract that war leaded with a lot of unclear issues that had to be taken care of. Also, we can appreciate a slightly increase of non war related agreements on 2015.')
 # Selecionar any i veure quins acords predominen
 
 any = st.slider('Data', 1991,2019, (1997,2012) )  # min: 0, max: 23
@@ -70,7 +70,7 @@ fig2 = go.Figure(dict(data=series, layout=go.Layout(
     showlegend=False
 )))
 st.plotly_chart(fig2)
-
+st.write("After a little bit of exploring with the dot matrix it’s easy to see that most years have both types of the agreements even in the more recent ages. Despite that, there are a few years where just one type of agreements occurred: 2003 just has war related agreements whereas 2015 was non related.")
 
 # Estat dels acords guardat per motiu de l'acords
 
@@ -82,7 +82,7 @@ fig47 = make_subplots(
     
 df = pd.read_excel('Estat.xlsx')
 df = df.loc[df['Status'] == stat]
-hola =go.Bar(x=df["Count"], y=df["Contp"], orientation='h')
+
 fig47.add_trace(go.Bar(x=df["Count"], y=df["Contp"], orientation='h'), row=1, col=1)
 
 
@@ -94,7 +94,7 @@ dd = pd.read_excel('Europa2.xlsx')
 dd = dd[(dd['Lgt']>=pag[0])& (dd['Lgt']<=pag[1])]
 dd = dd[(dd['N_characters']>=lletres[0])& (dd['Lgt']<=lletres[1])]
 
-hola = go.Scatter(x=dd['Lgt'] , y=dd['N_characters'],mode='markers', marker=dict(symbol = 'circle', size= 5))
+hola = go.Scatter(x=dd['Lgt'] , y=dd['N_characters'],mode='markers', marker=dict(symbol = 'circle', size= 5, color='#B2D0EB'))
 fig47.add_trace(hola, row=1, col=2)
 fig47.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
 fig47.update_layout(showlegend=False)
