@@ -102,7 +102,7 @@ fig7.update_layout(barmode='stack', xaxis={'categoryorder':'category ascending'}
 fig7.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',width=770,height=500)
 fig7.update_layout(showlegend=False)
 st.plotly_chart(fig7)
-
+st.write("Most popular groups being considered in the agreements are GRefRhef, GRefSubs, GMigSubs and GRaAntid. Most popular groups being considered in the agreements are refugees (preambular and comprehensive commitment); migrant workers and Racial/ethnic/national groups.")
 
 # MAPA
 
@@ -139,3 +139,5 @@ fig.update_layout(
     )
 
 st.plotly_chart(fig)
+st.write("Finally, in this graph we can appreciate not only which countries that have more agreements going on or done, but also which of them had done more agreements. For example, we can see that Former Yugoslavia, Russia and Georgia are the countries with more agreements going on whereas countries as Afghanistan, Spain and Macedonia has made just one agreement this last year.")
+
