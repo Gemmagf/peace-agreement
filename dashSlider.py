@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import plotly.express as px
+from pywaffle import Waffle
 import seaborn as sns
 import altair as alt
 
@@ -43,37 +44,18 @@ NWR = year.loc[(year['RelGuerra'] == 'No War Related')]
 
 ds = pd.Series({'War Related' : (len(WR)*100)/len(year), 'No War Related' : (len(NWR)*100)/len(year)})
 
-Xlim = 10
-Ylim = 10
-Xpos = 0
-Ypos = 0 ##change to zero for upwards
-series = []
-for name, count in ds.iteritems():
-    x = []
-    y = []
-    for j in range(0, (int(round(count)))):
-        if Xpos == Xlim:
-            Xpos = 0
-            Ypos -= 1 ##change to positive for upwards
-        x.append(Xpos)
-        y.append(Ypos)
-        Xpos += 1
-    #col =['#B2D0EB']*len(x)*100)/len(year)))) + ['#8AB3BA']*(int(round((len(NWR)*100)/len(year))))
-    series.append(go.Scatter(x=x, y=y, mode='markers', marker=dict(symbol = 'circle', size= 15), name=f'{name} ({count})'))
-
-
-fig2 = go.Figure(dict(data=series, layout=go.Layout(
-    paper_bgcolor='rgba(255,255,255,1)',
-    plot_bgcolor='rgba(0,0,0,0)',
-    xaxis=dict(showgrid=False,zeroline= False, showline=False, visible=False, showticklabels=False),
-    yaxis=dict(showgrid=False,zeroline= False, showline=False, visible=False, showticklabels=False),
-    showlegend=False
-)))
-st.plotly_chart(fig2)
+fig2 = plt.figure(
+    FigureClass=Waffle, 
+    rows=5, 
+    values=ds, 
+    colors=("#B2D0EB", "#8AB3BA"),
+    icons='circle', icon_size=15, icon_legend=False)
+    
+st.pyplot(fig2)
 st.write("After a little bit of exploring with the dot matrix it’s easy to see that most years have both types of the agreements even in the more recent ages. Despite that, there are a few years where just one type of agreements occurred: 2003 just has war related agreements whereas 2015 was non related.")
 
 # Estat dels acords guardat per motiu de l'acords
-
+tipus = st.selectbox('Type of agreements',('War Related','No War Related'))
 stat = st.selectbox('Select the status of the agreement',('Multiparty signed/agreed','Unilateral document','Agreement with subsequent status','Status unclear')) 
 
 fig47 = make_subplots(
@@ -81,27 +63,30 @@ fig47 = make_subplots(
     specs=[[{}, {}]])
     
 df = pd.read_excel('Estat.xlsx')
-df = df.loc[df['Status'] == stat]
+df = df.loc[(df['Status'] == stat)]
+df = df.loc[(df['RelGuerra'] == tipus)]
 
-fig47.add_trace(go.Bar(x=df["Count"], y=df["Contp"], orientation='h'), row=1, col=1)
+fig47.add_trace(go.Bar(x=df["Count"], y=df["Contp"], orientation='h',marker_color='#8AB3BA'), row=1, col=1)
 
 
 
 # Aspecte fisic dels Acords de pau
-lletres = st.slider('Characters', 329,197656, (329,197656))
+#lletres = st.slider('Characters', 329,197656, (329,197656))
 pag = st.slider('Pages', 1,149, (1,100))
 dd = pd.read_excel('Europa2.xlsx')
 dd = dd[(dd['Lgt']>=pag[0])& (dd['Lgt']<=pag[1])]
-dd = dd[(dd['N_characters']>=lletres[0])& (dd['Lgt']<=lletres[1])]
+dd = dd.loc[dd['RelGuerra'] == tipus]
+#dd = dd[(dd['N_characters']>=lletres[0])& (dd['Lgt']<=lletres[1])]
 
 hola = go.Scatter(x=dd['Lgt'] , y=dd['N_characters'],mode='markers', marker=dict(symbol = 'circle', size= 5, color='#B2D0EB'))
 fig47.add_trace(hola, row=1, col=2)
 fig47.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
 fig47.update_layout(showlegend=False)
 st.plotly_chart(fig47)
-
+st.write("It seems like the main reasons why the agreements are done in both cases are Territorial and also Governmental. Ones briefly analyzes the content of the agreements we can take a look to the physical aspects. Many of the agreements, regardless the type, is short in terms of the number of pages. When focusing on the filter, the no war related agreements seems to sometimes be longer or at least some of them. The war related ones, with just one exception is all under the 50 pages.")
 
 # Grafic per grups
+
 grups = st.multiselect('Which groups to you whant to consider?',options=['GChRhet', 'GChSubs','GDisRhet','GDisAntid','GDisSubs','GAgeRhet','GAgeAntid','GAgeSubs','GMig','GMigSubs','GRaRhet','GRaAntid','GRaSubs','GReRhet','GReAntid','GReSubs','GOth','GOthAntid','GRefRhet','GRefSubs','GRefOth','GSoc','GSocAntid'], default=['GDisSubs','GChRhet','GReAntid','GRefRhet','GRefRhet','GRefSubs','GRefOth','GSoc','GSocAntid'])
 
 df =pd.read_excel('agurpacions4.xlsx')
@@ -110,7 +95,7 @@ for i, grup in enumerate(grups):
     df2 = df2.append(df.loc[df['Grup'] == grup])
 r = np.arange(1,24)
 
-fig7= make_subplots(rows=1, cols=2, shared_yaxes=True)
+fig7= make_subplots( shared_yaxes=True)
 fig7.add_trace(go.Bar(x=grups, y=df2['NWR'], name='No War Related',  marker_color='#8AB3BA'))
 fig7.add_trace(go.Bar(x=grups, y=df2['WR'], name= 'War Related', marker_color='#B2D0EB'))
 fig7.update_layout(barmode='stack', xaxis={'categoryorder':'category ascending'})
@@ -121,12 +106,12 @@ st.plotly_chart(fig7)
 
 # MAPA
 
-df = pd.read_excel('geo.xlsx')
+df = pd.read_excel('geo2.xlsx')
 df['text'] = df['name'] + '<br>Agreements : ' + (df['pop']).astype(str)
-limits = [(1,3),(4,5),(6,7)]
-colors = ["#B2D0EB","#033742","#8AB3BA"]
+limits = [(1,4),(5,7)]
+colors = ["#B2D0EB","#8AB3BA"]
 cities = []
-scale = 0.001
+scale = 0.01
 fig = go.Figure()
 
 for i in range(len(limits)):
