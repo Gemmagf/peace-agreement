@@ -87,7 +87,7 @@ st.write("It seems like the main reasons why the agreements are done in both cas
 
 # Grafic per grups
 
-grups = st.multiselect('Which groups to you whant to consider?',options=['GChRhet', 'GChSubs','GDisRhet','GDisAntid','GDisSubs','GAgeRhet','GAgeAntid','GAgeSubs','GMig','GMigSubs','GRaRhet','GRaAntid','GRaSubs','GReRhet','GReAntid','GReSubs','GOth','GOthAntid','GRefRhet','GRefSubs','GRefOth','GSoc','GSocAntid'], default=['GDisSubs','GChRhet','GReAntid','GRefRhet','GRefRhet','GRefSubs','GRefOth','GSoc','GSocAntid'])
+grups = st.multiselect('Which groups to you whant to consider?',options=['Children/Youth','Disabled persons','Elderly/Age','Migrant workers','Racial/ethnic/national groups','Religious groups','Other groups','Refugees/ displaced persons','Social Class'], default=['Religious groups','Migrant workers','Racial/ethnic/national groups'])
 
 df =pd.read_excel('agurpacions4.xlsx')
 df2 = pd.DataFrame()
@@ -102,8 +102,7 @@ fig7.update_layout(barmode='stack', xaxis={'categoryorder':'category ascending'}
 fig7.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',width=770,height=500)
 fig7.update_layout(showlegend=False)
 st.plotly_chart(fig7)
-st.write("Most popular groups being considered in the agreements are GRefRhef, GRefSubs, GMigSubs and GRaAntid. Most popular groups being considered in the agreements are refugees (preambular and comprehensive commitment); migrant workers and Racial/ethnic/national groups.")
-
+st.write("Most popular groups being considered in the agreements are refugees (preambular and comprehensive commitment) and Racial/ethnic/national groups.")
 # MAPA
 
 df = pd.read_excel('geo2.xlsx')
@@ -140,4 +139,3 @@ fig.update_layout(
 
 st.plotly_chart(fig)
 st.write("Finally, in this graph we can appreciate not only which countries that have more agreements going on or done, but also which of them had done more agreements. For example, we can see that Former Yugoslavia, Russia and Georgia are the countries with more agreements going on whereas countries as Afghanistan, Spain and Macedonia has made just one agreement this last year.")
-
