@@ -10,20 +10,11 @@ import seaborn as sns
 import altair as alt
 
 
-
-# Paleta de colors :  titol:#e73575 text general: #D0D3DA relguerra: #ed6d9b  norelgerra: #8AB3BA
-# streamlit run dash.py
-
 # Titol i subtitol
 st.markdown("<h1 style='text-align: center; color: #ed6d9b;font-family:verdana;font-size:300%;'>PEACE AGREEMENTS IN EUROPE FROM 1991 TO 2019</h1>", unsafe_allow_html=True)
 st.markdown("<h4 style='text-align: center;font-family:verdana; color: #D0D3DA;'>Gemma Garcia de la Fuente\n", unsafe_allow_html=True)
 st.write("# ")
 st.write("# ")
-
-
-# Finestra parametres
-# st.sidebar.title("Filters")
-# st.sidebar.info("Here you can filter by diferent vairbales in orther to get the specific infomration you're interest about")
 
 
 # Grafic per veure el nombre d'acords al llarg del temps
@@ -37,7 +28,7 @@ st.write("# ")
 st.markdown("<h2 style='text-align: center; color: #D0D3DA;font-family:verdana;font-size:150%;'>Agreement type per year</h1>", unsafe_allow_html=True)
 
 dd = pd.read_excel('AnysRGuer.xlsx') 
-fig1 = px.scatter(dd, x='Any' , y='Casos', color = 'RelGuerra',color_discrete_map={'War Related': '#e73575', 'No War Related': '#D0D3DA'}, size = 'Casos',width=770, height=300)
+fig1 = px.scatter(dd, x='Year' , y='Agreements', color = 'War Relation',color_discrete_map={'War Related': '#e73575', 'No War Related': '#D0D3DA'}, size = 'Agreements',width=770, height=300)
 fig1.update_layout(showlegend=True)
 fig1.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
 st.plotly_chart(fig1)
@@ -51,11 +42,9 @@ st.write("# ")
 st.markdown("<h2 style='text-align: center; color: #D0D3DA;font-family:verdana;font-size:150%;'>Proportion of war related and non-war related agreements in the selected periode of time</h1>", unsafe_allow_html=True)
 
 any = st.slider('Data', 1991,2019, (1997,2012) )  # min: 0, max: 23
-#fig = make_subplots(rows=1, cols=2)
-
-year = dd[(dd['Any']>=any[0])& (dd['Any']<=any[1])]
-WR = year.loc[(year['RelGuerra'] == 'War Related')]
-NWR = year.loc[(year['RelGuerra'] == 'No War Related')]
+year = dd[(dd['Year']>=any[0])& (dd['Year']<=any[1])]
+WR = year.loc[(year['War Relation'] == 'War Related')]
+NWR = year.loc[(year['War Relation'] == 'No War Related')]
 
 ds = pd.Series({'War Related' : (len(WR)*100)/len(year), 'No War Related' : (len(NWR)*100)/len(year)})
 
@@ -74,10 +63,10 @@ st.write("# ")
 st.write("# ")
 
 
-st.markdown("<h2 style='text-align: center; color: #D0D3DA;font-family:verdana;font-size:150%;'>Qualitative and Quantitative aspects</h1>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center; color: #D0D3DA;font-family:verdana;font-size:150%;'>Main themes (Government, Territory) and brief physical (pages vs characters) analysis </h1>", unsafe_allow_html=True)
 
 # Estat dels acords guardat per motiu de l'acords
-tipus = st.selectbox('Type of agreements',('All typs','War Related','No War Related'))
+tipus = st.selectbox('Type of agreements',('All types','War Related','No War Related'))
 stat = st.selectbox('Select the status of the agreement',('Multiparty signed/agreed','Unilateral document','Agreement with subsequent status','Status unclear')) 
 
 fig47 = make_subplots(
@@ -86,8 +75,8 @@ fig47 = make_subplots(
     
 df = pd.read_excel('Estat.xlsx')
 df = df.loc[(df['Status'] == stat)]
-if tipus != 'All typs':
-    dd = dd.loc[dd['RelGuerra'] == tipus]
+if tipus != 'All types':
+    dd = dd.loc[dd['War Relation'] == tipus]
 
 fig47.add_trace(go.Bar(x=df["Count"], y=df["Contp"], orientation='h',marker_color='#e73575'), row=1, col=1)
 
@@ -95,25 +84,16 @@ fig47.add_trace(go.Bar(x=df["Count"], y=df["Contp"], orientation='h',marker_colo
 
 
 # Aspecte fisic dels Acords de pau
-
 pag = st.slider('Pages', 1,149, (1,10))
 dd = pd.read_excel('Europa2.xlsx')
 dd = dd[(dd['Lgt']>=pag[0])& (dd['Lgt']<=pag[1])]
-if tipus != 'All typs':
-    dd = dd.loc[dd['RelGuerra'] == tipus]
-#dd = dd[(dd['N_characters']>=lletres[0])& (dd['Lgt']<=lletres[1])]
+dd = dd[(dd['N_characters']<15000)]
+if tipus != 'All types':
+    dd = dd.loc[dd['War Relation'] == tipus]
 
-#hola = go.Scatter(x=dd['Lgt'] , y=dd['N_characters'],mode='markers', marker=dict(symbol = 'circle', size= 5, color='#B2D0EB'))
-
-#fig47.add_trace(hola, row=1, col=2)
 fig47.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
-fig47.update_layout(showlegend=False)
-fig47.add_trace(go.Histogram2dContour(x=dd['Lgt'] , y=dd['N_characters'], nbinsx=5, nbinsy=5,colorscale = 'PuRd'), row=1, col=2)
-
-
-
-#hola = plt.hexbin(x=dd['Lgt'] , y=dd['N_characters'],color='#e73575',gridsize=20 )
-#fig47.add_trace(hola, row=1, col=2)
+#g47.update_layout(showlegend=False)
+fig47.add_trace(go.Histogram2dContour(x=dd['Lgt'] , y=dd['N_characters'],nbinsx=5, nbinsy=5,colorscale = 'PuRd'), row=1, col=2)
 fig47.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
 fig47.update_layout(showlegend=False)
 st.plotly_chart(fig47)
@@ -126,7 +106,6 @@ st.markdown("<h2 style='text-align: center; color: #e73575;font-family:verdana;f
 st.markdown("<h6 style='text-align: justify;color: #5e5e5e; font-family:verdana;font-size:90%;'>When focusing on the filter, the non-war related agreements seem to be longer, or at least some of them seem to be, than the war-related ones, with just one exception are all under the 50 pages.", unsafe_allow_html=True)
 
 # Grafic per grups
-
 st.write("# ")
 st.write("# ")
 st.markdown("<h2 style='text-align: center; color: #D0D3DA;font-family:verdana;font-size:150%;'>Groups involvend in the diferent agreemment types</h1>", unsafe_allow_html=True)
@@ -157,7 +136,7 @@ fig7.add_trace(go.Scatter(
 fig7.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',width=770,height=400)
 fig7.update_layout(showlegend=False)
 st.plotly_chart(fig7)
-st.markdown("<h6 style='text-align: center;color: #5e5e5e; font-family:verdana;font-size:90%;'>Most popular groups being considered in the agreements are refugees (preambular and comprehensive commitment) and Racial/ethnic/national groups.", unsafe_allow_html=True)
+st.markdown("<h6 style='text-align: justify;color: #5e5e5e; font-family:verdana;font-size:90%;'>Most popular groups being considered in the agreements are refugees (preambular and comprehensive commitment) and Racial/ethnic/national groups.", unsafe_allow_html=True)
 st.write("# ")
 st.write("# ")
 st.markdown("<h2 style='text-align: center; color: #D0D3DA;font-family:verdana;font-size:150%;'>Countries involved on the agreements</h1>", unsafe_allow_html=True)
@@ -203,4 +182,3 @@ st.markdown("<h2 style='text-align: center; color: #e73575;font-family:verdana;f
 st.markdown("<h6 style='text-align: center;color: #5e5e5e; font-family:verdana;font-size:90%;'>Were the countries with more agreements going on whereas countries such as:", unsafe_allow_html=True)
 st.markdown("<h2 style='text-align: center; color: #e73575;font-family:verdana;font-size:150%;'>Afghanistan, Spain and Macedonia ", unsafe_allow_html=True)
 st.markdown("<h6 style='text-align: center;color: #5e5e5e; font-family:verdana;font-size:90%;'>had made just one agreement that period.", unsafe_allow_html=True)
-
