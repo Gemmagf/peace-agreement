@@ -15,10 +15,11 @@ import altair as alt
 # streamlit run dash.py
 
 # Titol i subtitol
-st.markdown("<h1 style='text-align: center; color: #ed6d9b;font-family:verdana;font-size:250%;'>PEACE AGREEMENTS IN EUROPE FROM 1991 TO 2019</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: #ed6d9b;font-family:verdana;font-size:300%;'>PEACE AGREEMENTS IN EUROPE FROM 1991 TO 2019</h1>", unsafe_allow_html=True)
 st.markdown("<h4 style='text-align: center;font-family:verdana; color: #D0D3DA;'>Gemma Garcia de la Fuente\n", unsafe_allow_html=True)
-st.markdown(" ")
-st.markdown("\n ")
+st.write("# ")
+st.write("# ")
+
 
 # Finestra parametres
 # st.sidebar.title("Filters")
@@ -26,23 +27,31 @@ st.markdown("\n ")
 
 
 # Grafic per veure el nombre d'acords al llarg del temps
-st.markdown("<h6 style='text-align: center;color: #5e5e5e; font-family:verdana;font-size:90%;'> After wars, many issues have to be taken care of.", unsafe_allow_html=True)
-st.markdown("<h2 style='text-align: center; color: #e73575;font-family:verdana;font-size:150%;'>TOTAL: 410 agreements </h1>", unsafe_allow_html=True)
-st.markdown("<h6 style='text-align: center;color: #5e5e5e;font-family:verdana;font-size:90%;'> This is a dashboard to explore how Europe maintained its peace between countries from 1991 to 2019. Specifically, we will explore which type of agreements were going in this period of time. ", unsafe_allow_html=True)
+st.markdown("<h6 style='text-align: center;color: #5e5e5e; font-family:verdana;font-size:100%;'> After wars, many issues have to be taken care of.", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center; color: #e73575;font-family:verdana;font-size:125%;'>TOTAL: 410 agreements </h1>", unsafe_allow_html=True)
+st.markdown("<h6 style='text-align: justify;color: #5e5e5e;font-family:verdana;font-size:100%;'> This is a dashboard to explore how Europe maintained its peace between countries from 1991 to 2019. Specifically, we will explore which type of agreements were going in this period of time. ", unsafe_allow_html=True)
+st.write("# ")
+
+st.write("# ")
+
+st.markdown("<h2 style='text-align: center; color: #D0D3DA;font-family:verdana;font-size:150%;'>Agreement type per year</h1>", unsafe_allow_html=True)
 
 dd = pd.read_excel('AnysRGuer.xlsx') 
 fig1 = px.scatter(dd, x='Any' , y='Casos', color = 'RelGuerra',color_discrete_map={'War Related': '#e73575', 'No War Related': '#D0D3DA'}, size = 'Casos',width=770, height=300)
-fig1.update_layout(showlegend=False)
+fig1.update_layout(showlegend=True)
 fig1.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
 st.plotly_chart(fig1)
-st.markdown("<h6 style='text-align: center;color: #5e5e5e; font-family:verdana;font-size:90%;'> As we can see the amount of agreements reduced with time. Also, most of them were mainly before 2000, and war-related. From this, we can extract that war led with many unclear issues that had to be taken care of. Also, we can appreciate a slight increase of non-war related agreements initiated in 2010.", unsafe_allow_html=True)
+st.markdown("<h6 style='text-align: justify;color: #5e5e5e; font-family:verdana;font-size:100%;'> As we can see the amount of agreements reduced with time. Also, most of them were mainly before 2000, and war-related. From this, we can extract that war led with many unclear issues that had to be taken care of. Also, we can appreciate a slight increase of non-war related agreements initiated in 2010.", unsafe_allow_html=True)
 
+st.write("# ")
+
+st.write("# ")
 
 # Selecionar any i veure quins acords predominen
+st.markdown("<h2 style='text-align: center; color: #D0D3DA;font-family:verdana;font-size:150%;'>Proportion of war related and non-war related agreements in the selected periode of time</h1>", unsafe_allow_html=True)
 
 any = st.slider('Data', 1991,2019, (1997,2012) )  # min: 0, max: 23
-fig = make_subplots(rows=1, cols=2)
-
+#fig = make_subplots(rows=1, cols=2)
 
 year = dd[(dd['Any']>=any[0])& (dd['Any']<=any[1])]
 WR = year.loc[(year['RelGuerra'] == 'War Related')]
@@ -52,16 +61,20 @@ ds = pd.Series({'War Related' : (len(WR)*100)/len(year), 'No War Related' : (len
 
 fig2 = plt.figure(
     FigureClass=Waffle, 
-    rows=5, 
+    rows=10,
+    columns=20,
     values=ds, 
     colors=("#ed6d9b", "#D0D3DA"),
-    icons='circle', icon_size=15, icon_legend=False)
-    
-st.pyplot(fig2)
-st.markdown("<h6 style='text-align: center;color: #5e5e5e; font-family:verdana;font-size:90%;'> After a little exploring with the dot matrix, it is easy to see that most years have both types of agreements even in the most recent ages. Despite that, there are a few years where just one type of agreement occurred: 2003 just had war-related agreements whereas 2015 had non-war related ones.", unsafe_allow_html=True)
-st.markdown("<h6 style='text-align: center;color: #5e5e5e; font-family:verdana;font-size:90%;'>", unsafe_allow_html=True)
-st.markdown("<h6 style='text-align: center;color: #5e5e5e; font-family:verdana;font-size:90%;'>", unsafe_allow_html=True)
+    icons='circle', icon_size=10, icon_legend=False)
 
+st.pyplot(fig2)
+st.markdown("<h6 style='text-align: justify;color: #5e5e5e; font-family:verdana;font-size:100%;'> After a little exploring with the dot matrix, it is easy to see that most years have both types of agreements even in the most recent ages. Despite that, there are a few years where just one type of agreement occurred: 2003 just had war-related agreements whereas 2015 had non-war related ones.", unsafe_allow_html=True)
+
+st.write("# ")
+st.write("# ")
+
+
+st.markdown("<h2 style='text-align: center; color: #D0D3DA;font-family:verdana;font-size:150%;'>Qualitative and Quantitative aspects</h1>", unsafe_allow_html=True)
 
 # Estat dels acords guardat per motiu de l'acords
 tipus = st.selectbox('Type of agreements',('All typs','War Related','No War Related'))
@@ -106,19 +119,19 @@ fig47.update_layout(showlegend=False)
 st.plotly_chart(fig47)
 
 
-st.markdown("<h6 style='text-align: center;color: #5e5e5e; font-family:verdana;font-size:90%;'>It seems like the main reasons why the agreements are done in both cases are:", unsafe_allow_html=True)
+st.markdown("<h6 style='text-align: justify;color: #5e5e5e; font-family:verdana;font-size:90%;'>It seems like the main reasons why the agreements are done in both cases are:", unsafe_allow_html=True)
 st.markdown("<h2 style='text-align: center; color: #e73575;font-family:verdana;font-size:150%;'>Territorial and also Governmental", unsafe_allow_html=True)
-st.markdown("<h6 style='text-align: center;color: #5e5e5e; font-family:verdana;font-size:90%;'>Once the content of the agreements have been briefly analyzed, we can take a look at the physical aspects. Many of the agreements, regardless of the type, are short in terms of the number of pages. ", unsafe_allow_html=True)
+st.markdown("<h6 style='text-align: justify;color: #5e5e5e; font-family:verdana;font-size:90%;'>Once the content of the agreements have been briefly analyzed, we can take a look at the physical aspects. Many of the agreements, regardless of the type, are short in terms of the number of pages. ", unsafe_allow_html=True)
 st.markdown("<h2 style='text-align: center; color: #e73575;font-family:verdana;font-size:150%;'>The mean number of pages is 3,89 ", unsafe_allow_html=True)
-st.markdown("<h6 style='text-align: center;color: #5e5e5e; font-family:verdana;font-size:90%;'>When focusing on the filter, the non-war related agreements seem to be longer, or at least some of them seem to be, than the war-related ones, with just one exception are all under the 50 pages.", unsafe_allow_html=True)
-st.markdown(" ")
-st.markdown("\n ")
+st.markdown("<h6 style='text-align: justify;color: #5e5e5e; font-family:verdana;font-size:90%;'>When focusing on the filter, the non-war related agreements seem to be longer, or at least some of them seem to be, than the war-related ones, with just one exception are all under the 50 pages.", unsafe_allow_html=True)
 
 # Grafic per grups
 
+st.write("# ")
+st.write("# ")
+st.markdown("<h2 style='text-align: center; color: #D0D3DA;font-family:verdana;font-size:150%;'>Groups involvend in the diferent agreemment types</h1>", unsafe_allow_html=True)
+
 grups = st.multiselect('Which groups to you whant to consider?',options=['Children/Youth','Disabled persons','Elderly/Age','Migrant workers','Racial/ethnic/national groups','Religious groups','Other groups','Refugees/ displaced persons','Social Class'], default=['Children/Youth','Migrant workers','Racial/ethnic/national groups'])
-st.markdown(" ")
-st.markdown("\n ")
 
 df =pd.read_excel('agurpacions4.xlsx')
 df2 = pd.DataFrame()
@@ -141,12 +154,14 @@ fig7.add_trace(go.Scatter(
     line=dict(width=0.5, color='#e73575'),
     stackgroup='one'
 ))
-fig7.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',width=770,height=500)
+fig7.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',width=770,height=400)
 fig7.update_layout(showlegend=False)
 st.plotly_chart(fig7)
 st.markdown("<h6 style='text-align: center;color: #5e5e5e; font-family:verdana;font-size:90%;'>Most popular groups being considered in the agreements are refugees (preambular and comprehensive commitment) and Racial/ethnic/national groups.", unsafe_allow_html=True)
-st.markdown(" ")
-st.markdown("\n ")
+st.write("# ")
+st.write("# ")
+st.markdown("<h2 style='text-align: center; color: #D0D3DA;font-family:verdana;font-size:150%;'>Countries involved on the agreements</h1>", unsafe_allow_html=True)
+
 
 
 # MAPA
@@ -183,7 +198,7 @@ fig.update_layout(
 fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',width=900,height=500)
 # paquet per fer gratics plotinum
 st.plotly_chart(fig)
-st.markdown("<h6 style='text-align: center;color: #5e5e5e; font-family:verdana;font-size:90%;'>Finally, in this graph we can appreciate not only which countries had more agreements going on or done, but also which of them had made more agreements.For example, we can see that ", unsafe_allow_html=True)
+st.markdown("<h6 style='text-align: justify;color: #5e5e5e; font-family:verdana;font-size:90%;'>Finally, in this graph we can appreciate not only which countries had more agreements going on or done, but also which of them had made more agreements.For example, we can see that ", unsafe_allow_html=True)
 st.markdown("<h2 style='text-align: center; color: #e73575;font-family:verdana;font-size:150%;'>Former Yugoslavia, Russia and Georgia", unsafe_allow_html=True)
 st.markdown("<h6 style='text-align: center;color: #5e5e5e; font-family:verdana;font-size:90%;'>Were the countries with more agreements going on whereas countries such as:", unsafe_allow_html=True)
 st.markdown("<h2 style='text-align: center; color: #e73575;font-family:verdana;font-size:150%;'>Afghanistan, Spain and Macedonia ", unsafe_allow_html=True)
