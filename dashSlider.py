@@ -152,37 +152,40 @@ st.markdown("\n ")
 # MAPA
 
 df = pd.read_excel('geo2.xlsx')
-df['text'] = df['name'] + '<br>Agreements : ' + (df['pop']).astype(str)
-limits = [(1,4),(5,7)]
-colors = ["#e73575","#8AB3BA"]
-cities = []
-scale = 0.01
-fig = go.Figure()
 
-for i in range(len(limits)):
-    lim = limits[i]
-    df_sub = df[lim[0]:lim[1]]
-    fig.add_trace(go.Scattergeo(
-        locationmode = 'USA-states',
-        lon = df_sub['lon'],
-        lat = df_sub['lat'],
-        marker = dict(
-            size = df_sub['pop']/scale,
-            color = colors[i],
-            line_color='rgb(40,40,40)',
-            line_width=0.5,
-            sizemode = 'area'
-        ),
-        name = '{0} - {1}'.format(lim[0],lim[1])))
-
-fig.update_layout(
-        showlegend = True,
-        geo = dict(
-            scope = 'europe',
-            landcolor = 'rgb(217, 217, 217)',
-        )
+fig = go.Figure(go.Choropleth(
+    locations = df['name'],
+    locationmode = "country names",
+    z = df['pop'],
+    colorscale = 'PuRd',
+    autocolorscale=False,
+    reversescale=False,
+    marker_line_color='#5e5e5e',
+    marker_line_width=0.1
     )
+)
+ 
+fig.update_layout(
+    showlegend = False,
+    geo = dict(
+        scope='europe',
+        resolution=110,
+        projection_type='miller',
+        showcoastlines=True,
+        showocean=True,
+        showcountries=True,
+        landcolor = 'rgb(255, 255, 255)',
+        oceancolor='#fff',
+        lakecolor='#fff',
+        coastlinecolor='#dadada'
+    )
+)
+fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',width=900,height=500)
 # paquet per fer gratics plotinum
 st.plotly_chart(fig)
-st.write("Finally, in this graph we can appreciate not only which countries that have more agreements going on or done, but also which of them had done more agreements. For example, we can see that Former Yugoslavia, Russia and Georgia are the countries with more agreements going on whereas countries as Afghanistan, Spain and Macedonia has made just one agreement this last year.")
+st.markdown("<h6 style='text-align: center;color: #5e5e5e; font-family:verdana;font-size:90%;'>Finally, in this graph we can appreciate not only which countries had more agreements going on or done, but also which of them had made more agreements.For example, we can see that ", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center; color: #e73575;font-family:verdana;font-size:150%;'>Former Yugoslavia, Russia and Georgia", unsafe_allow_html=True)
+st.markdown("<h6 style='text-align: center;color: #5e5e5e; font-family:verdana;font-size:90%;'>Were the countries with more agreements going on whereas countries such as:", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center; color: #e73575;font-family:verdana;font-size:150%;'>Afghanistan, Spain and Macedonia ", unsafe_allow_html=True)
+st.markdown("<h6 style='text-align: center;color: #5e5e5e; font-family:verdana;font-size:90%;'>had made just one agreement that period.", unsafe_allow_html=True)
 
