@@ -71,14 +71,15 @@ stat = st.selectbox('Select the status of the agreement',('Multiparty signed/agr
 
 fig47 = make_subplots(
     rows=1, cols=2,
-    specs=[[{}, {}]])
+   specs=[[{'type':'domain'}, {}]])
     
 df = pd.read_excel('Estat.xlsx')
 df = df.loc[(df['Status'] == stat)]
 if tipus != 'All types':
-    dd = dd.loc[dd['War Relation'] == tipus]
+    df = df.loc[df['RelGuerra'] == tipus]
 
-fig47.add_trace(go.Bar(x=df["Count"], y=df["Contp"], orientation='h',marker_color='#e73575'), row=1, col=1)
+color = ['#ff98bd','#ff5c96','#e73575','#fdd0e0','#fdd0e0','#fdd0e0','#fdd0e0']
+fig47.add_trace(go.Pie(labels=df["Contp"], values=df["Count"], hole=.5, marker_colors=color,name = 'Theme'),1,1)
 
 
 
@@ -182,3 +183,4 @@ st.markdown("<h2 style='text-align: center; color: #e73575;font-family:verdana;f
 st.markdown("<h6 style='text-align: center;color: #5e5e5e; font-family:verdana;font-size:90%;'>Were the countries with more agreements going on whereas countries such as:", unsafe_allow_html=True)
 st.markdown("<h2 style='text-align: center; color: #e73575;font-family:verdana;font-size:150%;'>Afghanistan, Spain and Macedonia ", unsafe_allow_html=True)
 st.markdown("<h6 style='text-align: center;color: #5e5e5e; font-family:verdana;font-size:90%;'>had made just one agreement that period.", unsafe_allow_html=True)
+
