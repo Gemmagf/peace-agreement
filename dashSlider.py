@@ -85,7 +85,7 @@ fig47.add_trace(go.Pie(labels=df["Contp"], values=df["Count"], hole=.5, marker_c
 
 
 # Aspecte fisic dels Acords de pau
-pag = st.slider('Pages', 1,149, (1,10))
+pag = st.slider('Pages', 1,149, (16,116))
 dd = pd.read_excel('Europa2.xlsx')
 dd = dd[(dd['Lgt']>=pag[0])& (dd['Lgt']<=pag[1])]
 dd = dd[(dd['N_characters']<15000)]
@@ -102,7 +102,7 @@ st.plotly_chart(fig47)
 
 st.markdown("<h6 style='text-align: justify;color: #5e5e5e; font-family:verdana;font-size:90%;'>It seems like the main reasons why the agreements are done in both cases are:", unsafe_allow_html=True)
 st.markdown("<h2 style='text-align: center; color: #e73575;font-family:verdana;font-size:150%;'>Territorial and also Governmental", unsafe_allow_html=True)
-st.markdown("<h6 style='text-align: justify;color: #5e5e5e; font-family:verdana;font-size:90%;'>Once the content of the agreements have been briefly analyzed, we can take a look at the physical aspects. Many of the agreements, regardless of the type, are short in terms of the number of pages. ", unsafe_allow_html=True)
+st.markdown("<h6 style='text-align: justify;color: #5e5e5e; font-family:verdana;font-size:90%;'>Once the content of the agreements have been briefly analyzed, we can take a look at the physical aspects (pages vs characters). Many of the agreements, regardless of the type, are short in terms of the number of pages. ", unsafe_allow_html=True)
 st.markdown("<h2 style='text-align: center; color: #e73575;font-family:verdana;font-size:150%;'>The mean number of pages is 3,89 ", unsafe_allow_html=True)
 st.markdown("<h6 style='text-align: justify;color: #5e5e5e; font-family:verdana;font-size:90%;'>When focusing on the filter, the non-war related agreements seem to be longer, or at least some of them seem to be, than the war-related ones, with just one exception are all under the 50 pages.", unsafe_allow_html=True)
 
