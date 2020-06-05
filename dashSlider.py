@@ -184,3 +184,9 @@ st.markdown("<h6 style='text-align: center;color: #5e5e5e; font-family:verdana;f
 st.markdown("<h2 style='text-align: center; color: #e73575;font-family:verdana;font-size:150%;'>Afghanistan, Spain and Macedonia ", unsafe_allow_html=True)
 st.markdown("<h6 style='text-align: center;color: #5e5e5e; font-family:verdana;font-size:90%;'>had made just one agreement that period.", unsafe_allow_html=True)
 
+st.write("# ")
+st.write("# ")
+st.write("# ")
+st.write("# ")
+st.markdown("<h3 style='text-align: center;font-family:verdana; color: #D0D3DA;font-size:70%;'>Gemma Garcia de la Fuente 2020. Under Crative Commons BY", unsafe_allow_html=True)
+
