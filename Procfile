@@ -1,1 +1,1 @@
-web: sh setup.sh && streamlit run dashSlider.py
+web: sh setup.sh && streamlit run CV.py
